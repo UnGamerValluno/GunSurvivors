@@ -68,12 +68,21 @@ void ATopDownCharacter::MoveTriggered(const FInputActionValue& Value)
 	if (CanMove)
 	{
 		MovementDirection = MoveActionValue;
+		CharacterFlipbook->SetFlipbook(RunFlipbook);
+		FVector FlipbookScale = CharacterFlipbook->GetComponentScale();
+		float DirectionScale = (MovementDirection.X < 0.0f) ? -1.f : 1.f;
+
+		if (MovementDirection.X < 0.0f && FlipbookScale.X > 0.0f || MovementDirection.X > 0.0f && FlipbookScale.X < 0.0f)
+		{
+			CharacterFlipbook->SetWorldScale3D(FVector(DirectionScale, 1.0f, 1.0f));
+		}
 	}
 }
 
 void ATopDownCharacter::MoveCompleted(const FInputActionValue& Value)
 {
 	MovementDirection = FVector2D(0.f, 0.f);
+	CharacterFlipbook->SetFlipbook(IdleFlipbook);
 }
 
 void ATopDownCharacter::Shoot(const FInputActionValue& Value)
