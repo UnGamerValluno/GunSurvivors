@@ -29,6 +29,21 @@ void ATopDownCharacter::BeginPlay()
 void ATopDownCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
+	if (CanMove && MovementDirection.Length() > 0.f)
+	{
+		if (MovementDirection.Length() > 1.f)
+		{
+			MovementDirection.Normalize();
+		}
+
+		FVector2D DistanceToMove = MovementDirection * MovementSpeed * DeltaTime;
+
+		// The 2D game is actually rendered in the X,Z plane; NOT the X,Y plane. This is why the Y value is assigned to Z
+		FVector NewLocation = GetActorLocation() + FVector(DistanceToMove.X, 0.f, DistanceToMove.Y);
+
+		SetActorLocation(NewLocation);
+	}
 }
 
 void ATopDownCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -50,15 +65,17 @@ void ATopDownCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
 void ATopDownCharacter::MoveTriggered(const FInputActionValue& Value)
 {
 	FVector2D MoveActionValue = Value.Get<FVector2D>();
-	GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::White, MoveActionValue.ToString());
+	if (CanMove)
+	{
+		MovementDirection = MoveActionValue;
+	}
 }
 
 void ATopDownCharacter::MoveCompleted(const FInputActionValue& Value)
 {
-	GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Green, TEXT("Move Completed"));
+	MovementDirection = FVector2D(0.f, 0.f);
 }
 
 void ATopDownCharacter::Shoot(const FInputActionValue& Value)
 {
-	GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("Pium Pium"));
 }
