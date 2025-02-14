@@ -40,7 +40,17 @@ void ATopDownCharacter::Tick(float DeltaTime)
 		FVector2D DistanceToMove = MovementDirection * MovementSpeed * DeltaTime;
 
 		// The 2D game is actually rendered in the X,Z plane; NOT the X,Y plane. This is why the Y value is assigned to Z
-		FVector NewLocation = GetActorLocation() + FVector(DistanceToMove.X, 0.f, DistanceToMove.Y);
+		FVector NewLocation = GetActorLocation() + FVector(DistanceToMove.X, 0.f, 0.f);
+		if (!IsInMapBoundsHorizontal(NewLocation.X))
+		{
+			NewLocation -= FVector(DistanceToMove.X, 0.f, 0.f);
+		}
+
+		NewLocation += FVector(0.f, 0.f, DistanceToMove.Y);
+		if (!IsInMapBoundsVertical(NewLocation.Z))
+		{
+			NewLocation -= FVector(0.f, 0.f, DistanceToMove.Y);
+		}
 
 		SetActorLocation(NewLocation);
 	}
@@ -87,4 +97,15 @@ void ATopDownCharacter::MoveCompleted(const FInputActionValue& Value)
 
 void ATopDownCharacter::Shoot(const FInputActionValue& Value)
 {
+}
+
+
+bool ATopDownCharacter::IsInMapBoundsHorizontal(float XPosition)
+{
+	return (XPosition > HorizontalLimits.X) && (XPosition < HorizontalLimits.Y);
+}
+
+bool ATopDownCharacter::IsInMapBoundsVertical(float ZPosition)
+{
+	return (ZPosition > VerticalLimits.X) && (ZPosition < VerticalLimits.Y);
 }
