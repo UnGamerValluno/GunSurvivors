@@ -1,3 +1,4 @@
+#include "Kismet/KismetMathLibrary.h"
 #include "TopDownCharacter.h"
 
 ATopDownCharacter::ATopDownCharacter()
@@ -27,6 +28,7 @@ void ATopDownCharacter::BeginPlay()
 	APlayerController* PlayerController = Cast<APlayerController>(Controller);
 	if (PlayerController)
 	{
+		PlayerController->SetShowMouseCursor(true);
 		UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PlayerController->GetLocalPlayer());
 		if (Subsystem)
 		{
@@ -39,6 +41,7 @@ void ATopDownCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	// Move Player
 	if (CanMove && MovementDirection.Length() > 0.f)
 	{
 		if (MovementDirection.Length() > 1.f)
@@ -62,6 +65,22 @@ void ATopDownCharacter::Tick(float DeltaTime)
 		}
 
 		SetActorLocation(NewLocation);
+	}
+
+	// Rotate The Gun
+	APlayerController* PlayerController = Cast<APlayerController>(Controller);
+	if (PlayerController)
+	{
+		FVector MouseWorldLocation;
+		FVector MouseWorldDirection;
+		PlayerController->DeprojectMousePositionToWorld(MouseWorldLocation, MouseWorldDirection);
+
+		FVector CurrentLocation = GetActorLocation();
+		FVector Start = FVector(CurrentLocation.X, 0.f, CurrentLocation.Z);
+		FVector Target = FVector(MouseWorldLocation.X, 0.f, MouseWorldLocation.Z);
+		FRotator GunParentRotator = UKismetMathLibrary::FindLookAtRotation(Start, Target);
+
+		GunParent->SetRelativeRotation(GunParentRotator);
 	}
 }
 
