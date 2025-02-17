@@ -41,7 +41,12 @@ void ATopDownCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	// Move Player
+	Move(DeltaTime);
+	RotateGun();
+}
+
+void ATopDownCharacter::Move(float DeltaTime)
+{
 	if (CanMove && MovementDirection.Length() > 0.f)
 	{
 		if (MovementDirection.Length() > 1.f)
@@ -66,8 +71,10 @@ void ATopDownCharacter::Tick(float DeltaTime)
 
 		SetActorLocation(NewLocation);
 	}
+}
 
-	// Rotate The Gun
+void ATopDownCharacter::RotateGun()
+{
 	APlayerController* PlayerController = Cast<APlayerController>(Controller);
 	if (PlayerController)
 	{

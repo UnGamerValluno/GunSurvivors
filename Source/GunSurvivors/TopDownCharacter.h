@@ -72,6 +72,10 @@ public:
 
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+	void Move(float DeltaTime);
+
+	void RotateGun();
+
 	void MoveTriggered(const FInputActionValue& Value);
 
 	void MoveCompleted(const FInputActionValue& Value);
