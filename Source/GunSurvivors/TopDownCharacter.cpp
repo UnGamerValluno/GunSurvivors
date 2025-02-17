@@ -132,8 +132,38 @@ void ATopDownCharacter::MoveCompleted(const FInputActionValue& Value)
 
 void ATopDownCharacter::Shoot(const FInputActionValue& Value)
 {
+	if (CanShoot)
+	{
+		CanShoot = false;
+
+		// Spawn Bullet Actor
+		ABullet* Bullet = GetWorld()->SpawnActor<ABullet>(BulletActor, BulletSpawnPosition->GetComponentLocation(), FRotator(0.f, 0.f, 0.f));
+		check(Bullet);
+
+		// Get mouse world location
+		APlayerController* PlayerController = Cast<APlayerController>(Controller);
+		check(PlayerController);
+
+		FVector MouseWorldLocation;
+		FVector MouseWorldDirection;
+		PlayerController->DeprojectMousePositionToWorld(MouseWorldLocation, MouseWorldDirection);
+
+		// Calculate bullet direction
+		FVector CurrentLocation = GetActorLocation();
+		FVector2D BulletDirection = FVector2D(MouseWorldLocation.X - CurrentLocation.X, MouseWorldLocation.Z - CurrentLocation.Z);
+		BulletDirection.Normalize();
+
+		// Launch the bullet
+		Bullet->Launch(BulletDirection, 300.f);
+
+		GetWorldTimerManager().SetTimer(ShootCooldownTimer, this, &ATopDownCharacter::OnShootCooldownTimerTimeout, 1.f, false, ShootCooldownInSeconds);
+	}
 }
 
+void ATopDownCharacter::OnShootCooldownTimerTimeout()
+{
+	CanShoot = true;
+}
 
 bool ATopDownCharacter::IsInMapBoundsHorizontal(float XPosition)
 {

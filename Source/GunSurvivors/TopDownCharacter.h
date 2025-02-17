@@ -1,9 +1,11 @@
 #pragma once
 
+#include "Bullet.h"
 #include "Components/CapsuleComponent.h"
 #include "Components/InputComponent.h"
 #include "Components/SceneComponent.h"
 #include "CoreMinimal.h"
+#include "Engine/TimerHandle.h"
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "GameFramework/Controller.h"
@@ -55,6 +57,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	FVector2D VerticalLimits;
 
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<ABullet> BulletActor;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float MovementSpeed = 100.0f;
 
@@ -63,6 +68,14 @@ public:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	bool CanMove = true;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	bool CanShoot = true;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float ShootCooldownInSeconds = 0.3f;
+
+	FTimerHandle ShootCooldownTimer;
 
 	ATopDownCharacter();
 
@@ -85,4 +98,6 @@ public:
 	bool IsInMapBoundsHorizontal(float XPosition);
 
 	bool IsInMapBoundsVertical(float ZPosition);
+
+	void OnShootCooldownTimerTimeout();
 };
