@@ -31,6 +31,12 @@ void AEnemy::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	Move(DeltaTime);
+	FacePlayer();
+}
+
+void AEnemy::Move(float DeltaTime)
+{
 	if (IsAlive && CanFollow && Player)
 	{
 		FVector CurrentLocation = GetActorLocation();
@@ -42,5 +48,16 @@ void AEnemy::Tick(float DeltaTime)
 			FVector NewLocation = CurrentLocation + (DirectionToPlayer * MovementSpeed * DeltaTime);
 			SetActorLocation(NewLocation);
 		}
+	}
+}
+
+void AEnemy::FacePlayer()
+{
+	float FlipbookScale = EnemyFlipbook->GetComponentScale().X;
+	float DirectionScale = (Player->GetActorLocation().X - GetActorLocation().X >= 0.f) ? 1.f : -1.f;
+	
+	if (DirectionScale != FlipbookScale)
+	{
+		EnemyFlipbook->SetWorldScale3D(FVector(DirectionScale, 1.0f, 1.0f));
 	}
 }

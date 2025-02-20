@@ -35,10 +35,13 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float StopDistance = 20.0f;
 
-
 	AEnemy();
 
 	virtual void BeginPlay() override;
 
 	virtual void Tick(float DeltaTime) override;
+
+	void Move(float DeltaTime);
+
+	void FacePlayer();
 };
