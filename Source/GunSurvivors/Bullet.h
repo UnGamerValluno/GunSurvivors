@@ -5,6 +5,7 @@
 #include "Engine/TimerHandle.h"
 #include "GameFramework/Actor.h"
 #include "PaperSpriteComponent.h"
+
 #include "Bullet.generated.h"
 
 UCLASS()

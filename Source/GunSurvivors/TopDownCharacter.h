@@ -13,6 +13,7 @@
 #include "InputActionValue.h"
 #include "PaperFlipbookComponent.h"
 #include "PaperSpriteComponent.h"
+
 #include "TopDownCharacter.generated.h"
 
 UCLASS()
