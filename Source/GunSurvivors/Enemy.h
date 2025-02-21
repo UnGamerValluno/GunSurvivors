@@ -2,6 +2,7 @@
 
 #include "Components/CapsuleComponent.h"
 #include "CoreMinimal.h"
+#include "Engine/TimerHandle.h"
 #include "GameFramework/Actor.h"
 #include "PaperFlipbookComponent.h"
 #include "TopDownCharacter.h"
@@ -12,13 +13,16 @@ UCLASS()
 class GUNSURVIVORS_API AEnemy : public AActor
 {
 	GENERATED_BODY()
-	
+
 public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	UCapsuleComponent* CapsuleComponent;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	UPaperFlipbookComponent* EnemyFlipbook;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UPaperFlipbook* DeadFlipbook;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	ATopDownCharacter* Player;
@@ -35,6 +39,8 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float StopDistance = 20.0f;
 
+	FTimerHandle DestroyTimer;
+
 	AEnemy();
 
 	virtual void BeginPlay() override;
@@ -44,4 +50,8 @@ public:
 	void Move(float DeltaTime);
 
 	void FacePlayer();
+
+	void Die();
+
+	void OnDestroyTimerTimeout();
 };

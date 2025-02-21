@@ -61,3 +61,22 @@ void AEnemy::FacePlayer()
 		EnemyFlipbook->SetWorldScale3D(FVector(DirectionScale, 1.0f, 1.0f));
 	}
 }
+
+void AEnemy::Die()
+{
+	if (IsAlive)
+	{
+		IsAlive = false;
+		CanFollow = false;
+		EnemyFlipbook->SetFlipbook(DeadFlipbook);
+		EnemyFlipbook->SetTranslucentSortPriority(4);
+
+		// Destroy the enemy after 10 seconds of its death
+		GetWorldTimerManager().SetTimer(DestroyTimer, this, &AEnemy::OnDestroyTimerTimeout, 1.f, false, 10.f);
+	}
+}
+
+void AEnemy::OnDestroyTimerTimeout()
+{
+	Destroy();
+}
