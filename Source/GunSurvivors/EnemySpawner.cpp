@@ -19,12 +19,18 @@ void AEnemySpawner::Tick(float DeltaTime)
 
 void AEnemySpawner::StartSpawning()
 {
-	GetWorldTimerManager().SetTimer(SpawnTimer, this, &AEnemySpawner::SpawnEnemy, 1.f, true, SpawnTime);
+	GetWorldTimerManager().SetTimer(SpawnTimer, this, &AEnemySpawner::OnSpawnTimerTimeout, 1.f, true, SpawnTime);
 }
 
 void AEnemySpawner::StopSpawning()
 {
 	GetWorldTimerManager().ClearTimer(SpawnTimer);
+}
+
+void AEnemySpawner::OnSpawnTimerTimeout()
+{
+	SpawnEnemy();
+	CheckDifficulty();
 }
 
 void AEnemySpawner::SpawnEnemy()
@@ -42,4 +48,16 @@ void AEnemySpawner::SpawnEnemy()
 	FVector EnemyLocation = GetActorLocation() + FVector(RandomPosition.X, 0.f, RandomPosition.Y);
 
 	GetWorld()->SpawnActor<AEnemy>(EnemyClass, EnemyLocation, FRotator::ZeroRotator);
+
+	EnemyCount++;
+}
+
+void AEnemySpawner::CheckDifficulty()
+{
+	if(EnemyCount % DifficultySpikeInterval == 0 && SpawnTime >= SpawnTimeMinimumLimit)
+	{
+		SpawnTime = std::max(SpawnTime - SpawnTimerDecreaseInterval, SpawnTimeMinimumLimit);
+		StopSpawning();
+		StartSpawning();
+	}
 }
