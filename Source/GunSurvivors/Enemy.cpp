@@ -1,5 +1,4 @@
 #include "Enemy.h"
-#include "Kismet/GameplayStatics.h"
 
 AEnemy::AEnemy()
 {
@@ -15,16 +14,6 @@ AEnemy::AEnemy()
 void AEnemy::BeginPlay()
 {
 	Super::BeginPlay();
-
-	if (!Player)
-	{
-		AActor* PlayerActor = UGameplayStatics::GetActorOfClass(GetWorld(), ATopDownCharacter::StaticClass());
-		if (PlayerActor)
-		{
-			Player = Cast<ATopDownCharacter>(PlayerActor);
-			CanFollow = true;
-		}
-	}
 }
 
 void AEnemy::Tick(float DeltaTime)

@@ -4,6 +4,7 @@
 #include "Enemy.h"
 #include "GameFramework/Actor.h"
 #include "Engine/TimerHandle.h"
+#include "TopDownCharacter.h"
 
 #include "EnemySpawner.generated.h"
 
@@ -36,6 +37,8 @@ public:
 
 	FTimerHandle SpawnTimer;
 
+	ATopDownCharacter* Player;
+
 	AEnemySpawner();
 
 	virtual void BeginPlay() override;
@@ -49,6 +52,8 @@ public:
 	void OnSpawnTimerTimeout();
 
 	void SpawnEnemy();
+
+	void SetUpEnemy(AEnemy* Enemy);
 
 	void CheckDifficulty();
 };

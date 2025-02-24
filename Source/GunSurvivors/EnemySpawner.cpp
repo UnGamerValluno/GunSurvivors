@@ -1,4 +1,5 @@
 #include "EnemySpawner.h"
+#include "Kismet/GameplayStatics.h"
 
 AEnemySpawner::AEnemySpawner()
 {
@@ -8,6 +9,12 @@ AEnemySpawner::AEnemySpawner()
 void AEnemySpawner::BeginPlay()
 {
 	Super::BeginPlay();
+
+	AActor* PlayerActor = UGameplayStatics::GetActorOfClass(GetWorld(), ATopDownCharacter::StaticClass());
+	if (PlayerActor)
+	{
+		Player = Cast<ATopDownCharacter>(PlayerActor);
+	}
 
 	StartSpawning();
 }
@@ -47,9 +54,19 @@ void AEnemySpawner::SpawnEnemy()
 	// The game takes place in the X,Z plane so only those are added to the location vector
 	FVector EnemyLocation = GetActorLocation() + FVector(RandomPosition.X, 0.f, RandomPosition.Y);
 
-	GetWorld()->SpawnActor<AEnemy>(EnemyClass, EnemyLocation, FRotator::ZeroRotator);
+	AEnemy* Enemy = GetWorld()->SpawnActor<AEnemy>(EnemyClass, EnemyLocation, FRotator::ZeroRotator);
 
-	EnemyCount++;
+	SetUpEnemy(Enemy);
+}
+
+void AEnemySpawner::SetUpEnemy(AEnemy* Enemy)
+{
+	if (Enemy)
+	{
+		EnemyCount++;
+		Enemy->Player = Player;
+		Enemy->CanFollow = true;
+	}
 }
 
 void AEnemySpawner::CheckDifficulty()
