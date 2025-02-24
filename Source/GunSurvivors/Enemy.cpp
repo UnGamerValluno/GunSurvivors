@@ -60,6 +60,8 @@ void AEnemy::Die()
 		EnemyFlipbook->SetFlipbook(DeadFlipbook);
 		EnemyFlipbook->SetTranslucentSortPriority(4);
 
+		EnemyDiedDelegate.Broadcast();
+
 		// Destroy the enemy after 10 seconds of its death
 		GetWorldTimerManager().SetTimer(DestroyTimer, this, &AEnemy::OnDestroyTimerTimeout, 1.f, false, 10.f);
 	}

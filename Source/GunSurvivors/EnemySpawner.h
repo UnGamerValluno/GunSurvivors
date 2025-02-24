@@ -3,6 +3,7 @@
 #include "CoreMinimal.h"
 #include "Enemy.h"
 #include "GameFramework/Actor.h"
+#include "GunSurvivorsGameMode.h"
 #include "Engine/TimerHandle.h"
 #include "TopDownCharacter.h"
 
@@ -39,11 +40,15 @@ public:
 
 	ATopDownCharacter* Player;
 
+	AGunSurvivorsGameMode* GameMode;
+
 	AEnemySpawner();
 
 	virtual void BeginPlay() override;
 
 	virtual void Tick(float DeltaTime) override;
+
+	void SetUpGame();
 
 	void StartSpawning();
 
@@ -56,4 +61,7 @@ public:
 	void SetUpEnemy(AEnemy* Enemy);
 
 	void CheckDifficulty();
+
+	UFUNCTION()
+	void OnEnemyDied();
 };

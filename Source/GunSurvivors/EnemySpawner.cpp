@@ -10,18 +10,29 @@ void AEnemySpawner::BeginPlay()
 {
 	Super::BeginPlay();
 
-	AActor* PlayerActor = UGameplayStatics::GetActorOfClass(GetWorld(), ATopDownCharacter::StaticClass());
-	if (PlayerActor)
-	{
-		Player = Cast<ATopDownCharacter>(PlayerActor);
-	}
-
+	SetUpGame();
 	StartSpawning();
 }
 
 void AEnemySpawner::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+}
+
+void AEnemySpawner::SetUpGame()
+{
+	AGameModeBase* GameModeBase = UGameplayStatics::GetGameMode(GetWorld());
+	if (GameMode)
+	{
+		GameMode = Cast<AGunSurvivorsGameMode>(GameModeBase);
+		check(GameMode);
+	}
+
+	AActor* PlayerActor = UGameplayStatics::GetActorOfClass(GetWorld(), ATopDownCharacter::StaticClass());
+	if (PlayerActor)
+	{
+		Player = Cast<ATopDownCharacter>(PlayerActor);
+	}
 }
 
 void AEnemySpawner::StartSpawning()
@@ -66,6 +77,7 @@ void AEnemySpawner::SetUpEnemy(AEnemy* Enemy)
 		EnemyCount++;
 		Enemy->Player = Player;
 		Enemy->CanFollow = true;
+		Enemy->EnemyDiedDelegate.AddDynamic(this, &AEnemySpawner::OnEnemyDied);
 	}
 }
 
@@ -77,4 +89,9 @@ void AEnemySpawner::CheckDifficulty()
 		StopSpawning();
 		StartSpawning();
 	}
+}
+
+void AEnemySpawner::OnEnemyDied()
+{
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Another One Bites The Dust"));
 }
