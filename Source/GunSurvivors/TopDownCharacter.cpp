@@ -1,4 +1,5 @@
 #include "Enemy.h"
+#include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "TopDownCharacter.h"
 
@@ -161,6 +162,7 @@ void ATopDownCharacter::Shoot(const FInputActionValue& Value)
 
 		// Launch the bullet
 		Bullet->Launch(BulletDirection, 300.f);
+		UGameplayStatics::PlaySound2D(GetWorld(), ShootSound);
 
 		GetWorldTimerManager().SetTimer(ShootCooldownTimer, this, &ATopDownCharacter::OnShootCooldownTimerTimeout, 1.f, false, ShootCooldownInSeconds);
 	}
@@ -192,6 +194,7 @@ void ATopDownCharacter::OverlapBegin(UPrimitiveComponent* OverlappedComponent, A
 		IsAlive = false;
 		CanMove = false;
 		CanShoot = false;
+		UGameplayStatics::PlaySound2D(GetWorld(), DeathSound);
 
 		PlayerDiedDelegate.Broadcast();
 	}

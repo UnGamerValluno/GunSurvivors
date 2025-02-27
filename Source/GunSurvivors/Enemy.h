@@ -5,6 +5,7 @@
 #include "Engine/TimerHandle.h"
 #include "GameFramework/Actor.h"
 #include "PaperFlipbookComponent.h"
+#include "Sound/SoundBase.h"
 #include "TopDownCharacter.h"
 
 #include "Enemy.generated.h"
@@ -25,6 +26,9 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	UPaperFlipbook* DeadFlipbook;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	USoundBase* DeathSound;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	ATopDownCharacter* Player;

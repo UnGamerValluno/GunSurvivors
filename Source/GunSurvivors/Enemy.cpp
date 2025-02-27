@@ -1,4 +1,5 @@
 #include "Enemy.h"
+#include "Kismet/GameplayStatics.h"
 
 AEnemy::AEnemy()
 {
@@ -59,6 +60,7 @@ void AEnemy::Die()
 		CanFollow = false;
 		EnemyFlipbook->SetFlipbook(DeadFlipbook);
 		EnemyFlipbook->SetTranslucentSortPriority(4);
+		UGameplayStatics::PlaySound2D(GetWorld(), DeathSound);
 
 		EnemyDiedDelegate.Broadcast();
 

@@ -13,6 +13,7 @@
 #include "InputActionValue.h"
 #include "PaperFlipbookComponent.h"
 #include "PaperSpriteComponent.h"
+#include "Sound/SoundBase.h"
 
 #include "TopDownCharacter.generated.h"
 
@@ -59,6 +60,12 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	FVector2D VerticalLimits;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	USoundBase* ShootSound;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	USoundBase* DeathSound;
 
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<ABullet> BulletActor;
