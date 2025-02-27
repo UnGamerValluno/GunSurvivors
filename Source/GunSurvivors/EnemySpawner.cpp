@@ -93,5 +93,8 @@ void AEnemySpawner::CheckDifficulty()
 
 void AEnemySpawner::OnEnemyDied()
 {
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Another One Bites The Dust"));
+	Score += 10;
+	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::White, FString::Printf(TEXT("Score: %d"), Score));
+//	int ScoreToAdd = 10;
+//	GameMode->AddScore(ScoreToAdd);
 }

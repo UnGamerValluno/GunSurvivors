@@ -25,6 +25,9 @@ public:
 	float SpawnDistance = 400.f;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	int Score = 0;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	int EnemyCount = 0;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
