@@ -129,8 +129,11 @@ void ATopDownCharacter::MoveTriggered(const FInputActionValue& Value)
 
 void ATopDownCharacter::MoveCompleted(const FInputActionValue& Value)
 {
-	MovementDirection = FVector2D(0.f, 0.f);
-	CharacterFlipbook->SetFlipbook(IdleFlipbook);
+	if (IsAlive)
+	{
+		MovementDirection = FVector2D(0.f, 0.f);
+		CharacterFlipbook->SetFlipbook(IdleFlipbook);
+	}
 }
 
 void ATopDownCharacter::Shoot(const FInputActionValue& Value)
@@ -165,7 +168,10 @@ void ATopDownCharacter::Shoot(const FInputActionValue& Value)
 
 void ATopDownCharacter::OnShootCooldownTimerTimeout()
 {
-	CanShoot = true;
+	if (IsAlive)
+	{
+		CanShoot = true;
+	}
 }
 
 bool ATopDownCharacter::IsInMapBoundsHorizontal(float XPosition)
