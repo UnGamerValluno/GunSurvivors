@@ -9,6 +9,8 @@
 
 #include "EnemySpawner.generated.h"
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FScoreChangedDelegate, int, NewScore);
+
 UCLASS()
 class GUNSURVIVORS_API AEnemySpawner : public AActor
 {
@@ -38,6 +40,9 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float SpawnTimerDecreaseInterval = 0.05f;
+
+	UPROPERTY(BlueprintAssignable)
+	FScoreChangedDelegate ScoreChangedDelegate;
 
 	FTimerHandle SpawnTimer;
 

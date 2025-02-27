@@ -94,7 +94,8 @@ void AEnemySpawner::CheckDifficulty()
 void AEnemySpawner::OnEnemyDied()
 {
 	Score += 10;
-	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::White, FString::Printf(TEXT("Score: %d"), Score));
+	ScoreChangedDelegate.Broadcast(Score);
+
 //	int ScoreToAdd = 10;
 //	GameMode->AddScore(ScoreToAdd);
 }
