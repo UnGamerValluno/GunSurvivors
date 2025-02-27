@@ -39,7 +39,7 @@ public:
 	float MovementSpeed = 50.0f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	float StopDistance = 20.0f;
+	float StopDistance = 15.0f;
 
 	FTimerHandle DestroyTimer;
 

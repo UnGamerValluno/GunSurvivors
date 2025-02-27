@@ -32,6 +32,7 @@ void AEnemySpawner::SetUpGame()
 	if (PlayerActor)
 	{
 		Player = Cast<ATopDownCharacter>(PlayerActor);
+		Player->PlayerDiedDelegate.AddDynamic(this, &AEnemySpawner::OnPlayerDied);
 	}
 }
 
@@ -98,4 +99,27 @@ void AEnemySpawner::OnEnemyDied()
 
 //	int ScoreToAdd = 10;
 //	GameMode->AddScore(ScoreToAdd);
+}
+
+void AEnemySpawner::OnPlayerDied()
+{
+	StopSpawning();
+
+	TArray<AActor*> Enemies;
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AEnemy::StaticClass(), Enemies);
+	for (AActor* Actor : Enemies)
+	{
+		AEnemy* Enemy = Cast<AEnemy>(Actor);
+		if (Enemy && Enemy->IsAlive)
+		{
+			Enemy->CanFollow = false;
+		}
+	}
+
+	GetWorldTimerManager().SetTimer(GameRestartTimer, this, &AEnemySpawner::RestartGame, 1.f, false, 5.f);
+}
+
+void AEnemySpawner::RestartGame()
+{
+	UGameplayStatics::OpenLevel(GetWorld(), FName("MainLevel"));
 }

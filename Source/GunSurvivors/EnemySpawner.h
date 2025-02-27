@@ -46,6 +46,8 @@ public:
 
 	FTimerHandle SpawnTimer;
 
+	FTimerHandle GameRestartTimer;
+
 	ATopDownCharacter* Player;
 
 	AGunSurvivorsGameMode* GameMode;
@@ -70,6 +72,11 @@ public:
 
 	void CheckDifficulty();
 
+	void RestartGame();
+
 	UFUNCTION()
 	void OnEnemyDied();
+
+	UFUNCTION()
+	void OnPlayerDied();
 };
